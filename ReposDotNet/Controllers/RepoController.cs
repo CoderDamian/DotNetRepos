@@ -29,7 +29,7 @@ namespace ReposDotNet.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string language)
+        public async Task<IActionResult> Index(string language, byte page, byte size)
         {
             var response = await _httpClient.GetAsync("").ConfigureAwait(false);
 
@@ -41,15 +41,20 @@ namespace ReposDotNet.Controllers
 
                 if (repos != null)
                 {
-                    ReposViewModel reposVM = new ReposViewModel()
+                    ReposViewModel reposVM = new()
                     {
                         Languages = new SelectList(repos.Select(r => r.Language).Distinct().ToList())
                     };
 
                     if (!String.IsNullOrWhiteSpace(language))
-                        repos = repos.Where(r => r.Language != null && r.Language.Contains(language)).ToList();
+                        repos = repos.Where(r => r.Language != null && r.Language.Contains(language));
+
+                    PageList<Repo> pageList = new(size, page, repos.Count());
+                    repos = pageList.GetRepos(repos.OrderBy(r => r.Name));
 
                     reposVM.Repos = repos.ToList();
+                    reposVM.TotalPages = pageList.PagesQuantity;
+                    reposVM.TotalRecords = pageList.RecordsNumber;
 
                     return View(reposVM);
                 }
