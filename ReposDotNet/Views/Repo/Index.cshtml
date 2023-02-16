@@ -1,0 +1,45 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ReposViewModel;
+@{
+    <h1>Microsoft GitHub Repos</h1>
+
+    <form asp-controller="Repo" asp-action="Index" method="get">
+
+        <select asp-for="Language" asp-items="Model.Languages">
+            <option value="">All</option>
+        </select>
+
+        <button class="btn-primary" action="submit">Filter</button>
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>@Html.DisplayNameFor(model => model.Repos[0].ID)</th>
+                <th>@Html.DisplayNameFor(model => model.Repos[0].Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Repos[0].Language)</th>
+                <th>@Html.DisplayNameFor(model => model.Repos[0].LastUpdated)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                byte contador = 0;
+            }
+            @foreach (var repo in Model.Repos)
+            {
+                contador++;
+
+                <tr>
+                    <td>@contador</td>
+                    <td>@Html.DisplayFor(modelItem => repo.ID)</td>
+                    <td>@Html.DisplayFor(modelItem => repo.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => repo.Language)</td>
+                    <td>@Html.DisplayFor(modelItem => repo.LastUpdated)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
