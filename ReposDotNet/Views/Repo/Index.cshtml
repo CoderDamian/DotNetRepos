@@ -11,8 +11,18 @@
             <option value="">All</option>
         </select>
 
+        <input asp-for="Page">
+
+        <input asp-for="Size">
+
         <button class="btn-primary" action="submit">Filter</button>
     </form>
+
+    <label>Total Pages:</label>
+    @Html.DisplayFor(model=>model.TotalPages)
+
+    <label>Total Records:</label>
+    @Html.DisplayFor(model=>model.TotalRecords)
 
     <table class="table">
         <thead>
@@ -28,7 +38,7 @@
             @{
                 byte contador = 0;
             }
-            @foreach (var repo in Model.Repos)
+            @foreach (var repo in Model.Repos.OrderBy(r=>r.Name))
             {
                 contador++;
 
